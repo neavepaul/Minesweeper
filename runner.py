@@ -17,6 +17,11 @@ pygame.init()
 size = width, height = 900, 600
 screen = pygame.display.set_mode(size)
 
+# Fonts
+OPEN_SANS = "assets/fonts/OpenSans-Regular.ttf"
+smallFont = pygame.font.Font(OPEN_SANS, 20)
+mediumFont = pygame.font.Font(OPEN_SANS, 28)
+largeFont = pygame.font.Font(OPEN_SANS, 40)
 
 # Compute board size
 BOARD_PADDING = 20

@@ -2,6 +2,7 @@ import pygame
 import sys
 import time
 
+from minesweeper import Minesweeper, MinesweeperAI
 
 HEIGHT = 10
 WIDTH = 10
@@ -36,6 +37,8 @@ flag = pygame.transform.scale(flag, (cell_size, cell_size))
 mine = pygame.image.load("assets/images/mine.png")
 mine = pygame.transform.scale(mine, (cell_size, cell_size))
 
+# Create game
+game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
 
 # Keep track of revealed cells, flagged cells, and if a mine was hit
 revealed = set()

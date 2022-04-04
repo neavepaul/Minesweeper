@@ -1,5 +1,7 @@
-# **Minesweeper**
+# **Minesweeper AI**
 -------------------------------------------------------------------------------------
 
-### *COMING SOON*  
+### A program that helps you play minesweeper by playing for you   
+   
+     
 ##### Game written pygame.

@@ -2,7 +2,8 @@ import pygame
 import sys
 import time
 
-from minesweeper import Minesweeper
+from minesweeper import Minesweeper, MinesweeperAI
+
 HEIGHT = 10
 WIDTH = 10
 MINES = 8
@@ -30,20 +31,21 @@ board_height = height - (BOARD_PADDING * 2)
 cell_size = int(min(board_width / WIDTH, board_height / HEIGHT))
 board_origin = (BOARD_PADDING, BOARD_PADDING)
 
-# Name the game
-pygame.display.set_caption("Minesweeper")
-
 # Add images
 flag = pygame.image.load("assets/images/flag.png")
 flag = pygame.transform.scale(flag, (cell_size, cell_size))
 mine = pygame.image.load("assets/images/mine.png")
 mine = pygame.transform.scale(mine, (cell_size, cell_size))
 
+# Name the game
+pygame.display.set_caption("Minesweeper")
+
 # Add icon
 pygame.display.set_icon(mine)
 
 # Create game and AI agent
 game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
+ai = MinesweeperAI(height=HEIGHT, width=WIDTH)
 
 # Keep track of revealed cells, flagged cells, and if a mine was hit
 revealed = set()
@@ -182,14 +184,45 @@ while True:
     elif left == 1:
         mouse = pygame.mouse.get_pos()
 
+        # If AI button clicked, make an AI move
+        if aiButton.collidepoint(mouse) and not lost:
+            move = ai.make_safe_move()
+            if move is None:
+                move = ai.make_random_move()
+                if move is None:
+                    flags = ai.mines.copy()
+                    print("GAME OVER.")
+                else:
+                    print("No known safe moves, AI making a guess.")
+            else:
+                print("AI playing safe.")
+            time.sleep(0.2)
+
+        # Reset game state
+        elif resetButton.collidepoint(mouse):
+            game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
+            ai = MinesweeperAI(height=HEIGHT, width=WIDTH)
+            revealed = set()
+            flags = set()
+            lost = False
+            continue
 
         # User-made move
-        if not lost:
+        elif not lost:
             for i in range(HEIGHT):
                 for j in range(WIDTH):
                     if (cells[i][j].collidepoint(mouse)
                             and (i, j) not in flags
                             and (i, j) not in revealed):
                         move = (i, j)
+
+    # Make move and update AI knowledge
+    if move:
+        if game.is_mine(move):
+            lost = True
+        else:
+            nearby = game.nearby_mines(move)
+            revealed.add(move)
+            ai.add_knowledge(move, nearby)
 
     pygame.display.flip()

@@ -39,6 +39,9 @@ flag = pygame.transform.scale(flag, (cell_size, cell_size))
 mine = pygame.image.load("assets/images/mine.png")
 mine = pygame.transform.scale(mine, (cell_size, cell_size))
 
+# Add icon
+pygame.display.set_icon(mine)
+
 # Create game
 game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
 

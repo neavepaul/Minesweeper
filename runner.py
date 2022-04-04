@@ -2,8 +2,7 @@ import pygame
 import sys
 import time
 
-from minesweeper import Minesweeper, MinesweeperAI
-
+from minesweeper import Minesweeper
 HEIGHT = 10
 WIDTH = 10
 MINES = 8
@@ -30,6 +29,9 @@ board_width = ((2 / 3) * width) - (BOARD_PADDING * 2)
 board_height = height - (BOARD_PADDING * 2)
 cell_size = int(min(board_width / WIDTH, board_height / HEIGHT))
 board_origin = (BOARD_PADDING, BOARD_PADDING)
+
+# Name the game
+pygame.display.set_caption("Minesweeper")
 
 # Add images
 flag = pygame.image.load("assets/images/flag.png")

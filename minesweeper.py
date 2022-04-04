@@ -26,7 +26,6 @@ class Minesweeper():
                 self.mines.add((i, j))
                 self.board[i][j] = True
 
-        # At first, player has found no mines
         self.mines_found = set()
 
     def print(self):
@@ -39,3 +38,25 @@ class Minesweeper():
                     print("| ", end="")
             print("|")
         print("--" * self.width + "-")
+
+    def is_mine(self, cell):
+        i, j = cell
+        return self.board[i][j]
+
+    def nearby_mines(self, cell):
+        count = 0
+
+        for i in range(cell[0] - 1, cell[0] + 2):
+            for j in range(cell[1] - 1, cell[1] + 2):
+
+                if (i, j) == cell:
+                    continue
+
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    if self.board[i][j]:
+                        count += 1
+
+        return count
+
+    def won(self):
+        return self.mines_found == self.mines

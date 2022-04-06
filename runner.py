@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 import sys
 import time
 
@@ -14,15 +14,15 @@ GRAY = (180, 180, 180)
 WHITE = (255, 255, 255)
 
 # Create game
-pygame.init()
+pg.init()
 size = width, height = 900, 600
-screen = pygame.display.set_mode(size)
+screen = pg.display.set_mode(size)
 
 # Fonts
 OPEN_SANS = "assets/fonts/OpenSans-Regular.ttf"
-smallFont = pygame.font.Font(OPEN_SANS, 20)
-mediumFont = pygame.font.Font(OPEN_SANS, 28)
-largeFont = pygame.font.Font(OPEN_SANS, 40)
+smallFont = pg.font.Font(OPEN_SANS, 20)
+mediumFont = pg.font.Font(OPEN_SANS, 28)
+largeFont = pg.font.Font(OPEN_SANS, 40)
 
 # Compute board size
 BOARD_PADDING = 20
@@ -32,16 +32,16 @@ cell_size = int(min(board_width / WIDTH, board_height / HEIGHT))
 board_origin = (BOARD_PADDING, BOARD_PADDING)
 
 # Add images
-flag = pygame.image.load("assets/images/flag.png")
-flag = pygame.transform.scale(flag, (cell_size, cell_size))
-mine = pygame.image.load("assets/images/mine.png")
-mine = pygame.transform.scale(mine, (cell_size, cell_size))
+flag = pg.image.load("assets/images/flag.png")
+flag = pg.transform.scale(flag, (cell_size, cell_size))
+mine = pg.image.load("assets/images/mine.png")
+mine = pg.transform.scale(mine, (cell_size, cell_size))
 
 # Name the game
-pygame.display.set_caption("Minesweeper")
+pg.display.set_caption("Minesweeper")
 
 # Add icon
-pygame.display.set_icon(mine)
+pg.display.set_icon(mine)
 
 # Create game and AI agent
 game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
@@ -58,8 +58,8 @@ instructions = True
 while True:
 
     # Check if game quit
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             sys.exit()
 
     screen.fill(BLACK)
@@ -86,22 +86,22 @@ while True:
             screen.blit(line, lineRect)
 
         # Play game button
-        buttonRect = pygame.Rect((width / 4), (3 / 4) * height, width / 2, 50)
+        buttonRect = pg.Rect((width / 4), (3 / 4) * height, width / 2, 50)
         buttonText = mediumFont.render("Play Game", True, BLACK)
         buttonTextRect = buttonText.get_rect()
         buttonTextRect.center = buttonRect.center
-        pygame.draw.rect(screen, WHITE, buttonRect)
+        pg.draw.rect(screen, WHITE, buttonRect)
         screen.blit(buttonText, buttonTextRect)
 
         # Check if play button clicked
-        click, _, _ = pygame.mouse.get_pressed()
+        click, _, _ = pg.mouse.get_pressed()
         if click == 1:
-            mouse = pygame.mouse.get_pos()
+            mouse = pg.mouse.get_pos()
             if buttonRect.collidepoint(mouse):
                 instructions = False
                 time.sleep(0.3)
 
-        pygame.display.flip()
+        pg.display.flip()
         continue
 
     # Draw board
@@ -111,13 +111,13 @@ while True:
         for j in range(WIDTH):
 
             # Draw rectangle for cell
-            rect = pygame.Rect(
+            rect = pg.Rect(
                 board_origin[0] + j * cell_size,
                 board_origin[1] + i * cell_size,
                 cell_size, cell_size
             )
-            pygame.draw.rect(screen, GRAY, rect)
-            pygame.draw.rect(screen, WHITE, rect, 3)
+            pg.draw.rect(screen, GRAY, rect)
+            pg.draw.rect(screen, WHITE, rect, 3)
 
             # Add a mine, flag, or number if needed
             if game.is_mine((i, j)) and lost:
@@ -137,25 +137,25 @@ while True:
         cells.append(row)
 
     # AI Move button
-    aiButton = pygame.Rect(
+    aiButton = pg.Rect(
         (2 / 3) * width + BOARD_PADDING, (1 / 3) * height - 50,
         (width / 3) - BOARD_PADDING * 2, 50
     )
     buttonText = mediumFont.render("AI Move", True, BLACK)
     buttonRect = buttonText.get_rect()
     buttonRect.center = aiButton.center
-    pygame.draw.rect(screen, WHITE, aiButton)
+    pg.draw.rect(screen, WHITE, aiButton)
     screen.blit(buttonText, buttonRect)
 
     # Reset button
-    resetButton = pygame.Rect(
+    resetButton = pg.Rect(
         (2 / 3) * width + BOARD_PADDING, (1 / 3) * height + 20,
         (width / 3) - BOARD_PADDING * 2, 50
     )
     buttonText = mediumFont.render("Reset", True, BLACK)
     buttonRect = buttonText.get_rect()
     buttonRect.center = resetButton.center
-    pygame.draw.rect(screen, WHITE, resetButton)
+    pg.draw.rect(screen, WHITE, resetButton)
     screen.blit(buttonText, buttonRect)
 
     # Display text
@@ -167,11 +167,11 @@ while True:
 
     move = None
 
-    left, _, right = pygame.mouse.get_pressed()
+    left, _, right = pg.mouse.get_pressed()
 
     # Check for a right-click to toggle flagging
     if right == 1 and not lost:
-        mouse = pygame.mouse.get_pos()
+        mouse = pg.mouse.get_pos()
         for i in range(HEIGHT):
             for j in range(WIDTH):
                 if cells[i][j].collidepoint(mouse) and (i, j) not in revealed:
@@ -182,7 +182,7 @@ while True:
                     time.sleep(0.2)
 
     elif left == 1:
-        mouse = pygame.mouse.get_pos()
+        mouse = pg.mouse.get_pos()
 
         # If AI button clicked, make an AI move
         if aiButton.collidepoint(mouse) and not lost:
@@ -225,4 +225,4 @@ while True:
             revealed.add(move)
             ai.add_knowledge(move, nearby)
 
-    pygame.display.flip()
+    pg.display.flip()
